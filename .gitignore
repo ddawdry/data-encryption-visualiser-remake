@@ -1,0 +1,10 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+*.swp
+
+# Local-only reference docs (not part of the public repo)
+docs/roadmap.md
