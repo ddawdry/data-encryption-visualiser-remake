@@ -1,5 +1,16 @@
 # Docs
 
+## Running locally
+
+No build step — `index.html` is a static page loaded with native ES modules (`<script type="module">`), so it needs to be served over `http://`, not opened directly as a `file://` URL (browsers block module imports from `file://`).
+
+- **VS Code**: install the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension, then right-click `index.html` → "Open with Live Server".
+- **Any other editor**: run a static server from the project root, e.g. `npx serve .` or `python -m http.server`, then open the printed `localhost` URL.
+
+`DataEncrypt.html` (the original single-file app, still being migrated from) can be opened directly as a `file://` URL, since it has no module scripts.
+
+## Docs index
+
 - [scope.md](scope.md) — vision, and what's in/out of scope for the rebuild.
 - `architecture.md` — added once the core engine is designed (module contract, folder layout).
 - [diagrams/](diagrams/) — wireframes, user-flow sketches, architecture diagrams:
