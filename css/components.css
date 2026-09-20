@@ -1,1 +1,101 @@
 /* Reusable component styles (buttons, cards, panels) */
+.cipher-btn {
+    margin: var(--space-xs);
+    padding: var(--space-sm-md);
+    background-color: var(--color-bg-muted);
+    border: none;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.cipher-btn.active {
+    background-color: var(--color-accent);
+    color: var(--color-text-inverse);
+}
+
+.switch-btn {
+    flex: 1;
+    padding: var(--space-sm-md);
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    transition: all var(--transition-fast);
+}
+
+.switch-btn.active {
+    background-color: var(--color-accent);
+    color: var(--color-text-inverse);
+}
+
+#resultBox {
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    padding: var(--space-lg);
+    margin-top: var(--space-sm-md);
+    border-radius: var(--radius-sm);
+    min-height: 50px;
+}
+
+.hint-container {
+    position: relative;
+    display: inline-block;
+}
+
+.hint-container .hint-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: var(--color-tooltip-bg);
+    color: var(--color-tooltip-text);
+    text-align: center;
+    border-radius: var(--radius-md);
+    padding: var(--space-sm);
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    font-size: var(--font-size-sm);
+}
+
+.hint-container:hover .hint-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.highlight {
+    background-color: var(--color-highlight);
+    padding: 2px var(--space-xs);
+    border-radius: 3px;
+}
+
+.info-panel {
+    background-color: var(--color-info-bg);
+    padding: var(--space-lg);
+    margin: var(--space-lg) 0;
+    border-left: 4px solid var(--color-info-border);
+    border-radius: var(--radius-sm);
+}
+
+.char-block {
+    display: inline-block;
+    padding: var(--space-md);
+    margin: var(--space-xs);
+    background: var(--color-bg-muted);
+    border-radius: var(--radius-sm);
+}
+
+.char-block.changed {
+    background: var(--color-changed-bg);
+}
+
+.algo-description {
+    margin: var(--space-lg) 0;
+    padding: var(--space-lg);
+    background: var(--color-bg-surface);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+}

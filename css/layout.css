@@ -1,1 +1,37 @@
 /* Page layout and structural containers */
+body {
+    max-width: var(--layout-max-width);
+    margin: 0 auto;
+    padding: var(--space-xl);
+}
+
+.main-container {
+    background-color: var(--color-bg-panel);
+    padding: var(--space-xl);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.switch-container {
+    display: flex;
+    margin: var(--space-xl) 0;
+    background-color: var(--color-bg-muted);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    width: 300px;
+}
+
+.cipher-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin: var(--space-lg) 0;
+}
+
+.options-panel,
+.visualization-container,
+.text-input-row,
+.controls,
+.result-row {
+    margin: var(--space-lg) 0;
+}
