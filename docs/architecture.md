@@ -1,0 +1,49 @@
+# Architecture
+
+## Folder layout
+
+- `index.html` — shell page, mounts the app, no inline logic.
+- `css/` — `tokens.css` (design variables), `base.css`, `layout.css`, `components.css`, `themes.css` (light/dark via CSS vars).
+- `js/core/` — `cipherRegistry.js`, `stepEngine.js`, `historyStack.js`.
+- `js/ui/` — `visualizer.js`, `nav.js`, `controls.js`, `resultPanel.js`, `themeToggle.js`, `permalink.js`, `historyPanel.js`.
+- `js/ciphers/` — one module per cipher.
+- `js/analysis/` — `bruteForceCaesar.js`, `frequencyAnalysis.js`, `kasiski.js`.
+- `tests/` — `node --test`, one file per cipher module.
+
+## The cipher module contract
+
+This is the seam that makes "add a cipher = write a module, register it" true. See [diagrams/cipher-contract.png](diagrams/cipher-contract.png) for the before/after against the original `DataEncrypt.html`.
+
+A cipher module is a plain object matching the `CipherModule` typedef documented in `js/core/cipherRegistry.js`:
+
+```js
+{
+  id: 'caesar',                 // unique id
+  name: 'Caesar Cipher',        // display name
+  category: 'classical',        // groups the cipher picker
+  description: '...',           // shown in the description panel
+  paramsSchema: [                // declarative fields the options panel renders
+    { name: 'shift', label: 'Shift Amount', type: 'number', min: 1, max: 25, default: 3 }
+  ],
+  encrypt(text, params) { /* full transform, no animation */ },
+  decrypt(text, params) { /* full transform, no animation */ },
+  *stepThrough(text, params, mode) {
+    // yields one { index, oldChar, newChar, explanation } per character
+  }
+}
+```
+
+A module registers itself with `cipherRegistry.register(module)` when its file is imported. Nothing else in the app — `stepEngine`, the UI, the tests — is edited to add a new cipher; they only ever go through `cipherRegistry.get(id)` / `.list()`.
+
+## Runtime data flow
+
+See [diagrams/architecture.png](diagrams/architecture.png) for the full module map. In short:
+
+1. `app.js` bootstraps `cipherRegistry`, `stepEngine`, and `historyStack`, then mounts the UI layer.
+2. The UI's cipher picker (`nav.js`) is built from `cipherRegistry.list()` — it never hardcodes cipher buttons.
+3. On "Next Step", the UI calls `stepEngine.next()`. The engine fetches the active cipher via `cipherRegistry.get(id)`, pulls the next value from that cipher's `stepThrough()` generator, pushes the step onto `historyStack`, and yields it back to the UI (`visualizer.js`, `resultPanel.js`) to render.
+4. On "Back", the UI pops a cached step off `historyStack` instead of asking the engine to run the generator backwards — generators can't be rewound, so rewind state is cached forward-only as it's produced. See [diagrams/step-flow.png](diagrams/step-flow.png) for the full state flow.
+
+## UI layout
+
+[diagrams/ui-wireframe.png](diagrams/ui-wireframe.png) shows the region layout of `index.html`: header, mode switch, registry-driven cipher picker, a dynamic options panel generated from the active cipher's `paramsSchema`, description panel, visualization area, step controls, and result box.
