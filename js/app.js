@@ -1,40 +1,24 @@
 // Bootstraps the app: wires nav, cipher registry, and step engine together.
-import { register, list } from './core/cipherRegistry.js';
+import { list } from './core/cipherRegistry.js';
 import * as stepEngine from './core/stepEngine.js';
 import * as visualizer from './ui/visualizer.js';
 import * as nav from './ui/nav.js';
+import './ciphers/caesar.js';
 
-// Dummy cipher, replaced by real ones in M3 — proves the registry, step engine,
-// history stack, and visualizer are wired together correctly before that.
-const noopCipher = {
-    id: 'noop',
-    name: 'No-op (sanity check)',
-    category: 'debug',
-    description: 'Passes text through unchanged — verifies the wiring works before real ciphers are ported in.',
-    paramsSchema: [],
-    encrypt(text) {
-        return text;
-    },
-    decrypt(text) {
-        return text;
-    },
-    *stepThrough(text) {
-        for (let i = 0; i < text.length; i++) {
-            yield {
-                index: i,
-                oldChar: text[i],
-                newChar: text[i],
-                explanation: `No-op: '${text[i]}' passed through unchanged`,
-            };
-        }
-    },
-};
+function defaultParams(cipher) {
+    const params = {};
+    for (const field of cipher.paramsSchema) {
+        params[field.name] = field.default;
+    }
+    return params;
+}
 
-register(noopCipher);
-
-function runSanityCheck(cipher) {
+// Runs a cipher against a fixed demo string using its default params — proves
+// registry -> stepEngine -> visualizer wiring. Real text/param input arrives
+// once controls.js and the options panel are wired up in later checkpoints.
+function runDemo(cipher) {
     visualizer.clear();
-    stepEngine.start(cipher, 'hi', {}, 'encrypt');
+    stepEngine.start(cipher, 'hi', defaultParams(cipher), 'encrypt');
 
     let step;
     let stepNumber = 0;
@@ -44,5 +28,6 @@ function runSanityCheck(cipher) {
     }
 }
 
-nav.render(list(), runSanityCheck);
-runSanityCheck(noopCipher);
+const ciphers = list();
+nav.render(ciphers, runDemo);
+runDemo(ciphers[0]);
