@@ -5,6 +5,7 @@ import * as visualizer from './ui/visualizer.js';
 import * as nav from './ui/nav.js';
 import * as optionsPanel from './ui/optionsPanel.js';
 import './ciphers/caesar.js';
+import './ciphers/vigenere.js';
 
 let activeCipher = null;
 let activeParams = {};
