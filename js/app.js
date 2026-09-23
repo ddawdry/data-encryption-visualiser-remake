@@ -3,22 +3,19 @@ import { list } from './core/cipherRegistry.js';
 import * as stepEngine from './core/stepEngine.js';
 import * as visualizer from './ui/visualizer.js';
 import * as nav from './ui/nav.js';
+import * as optionsPanel from './ui/optionsPanel.js';
 import './ciphers/caesar.js';
 
-function defaultParams(cipher) {
-    const params = {};
-    for (const field of cipher.paramsSchema) {
-        params[field.name] = field.default;
-    }
-    return params;
-}
+let activeCipher = null;
+let activeParams = {};
 
-// Runs a cipher against a fixed demo string using its default params — proves
-// registry -> stepEngine -> visualizer wiring. Real text/param input arrives
-// once controls.js and the options panel are wired up in later checkpoints.
-function runDemo(cipher) {
+// Runs the active cipher against a fixed demo string — proves registry ->
+// stepEngine -> visualizer wiring. Real text input arrives once controls.js
+// and the text field are wired up in a later checkpoint.
+function runDemo() {
+    if (!activeCipher) return;
     visualizer.clear();
-    stepEngine.start(cipher, 'hi', defaultParams(cipher), 'encrypt');
+    stepEngine.start(activeCipher, 'hi', activeParams, 'encrypt');
 
     let step;
     let stepNumber = 0;
@@ -28,6 +25,14 @@ function runDemo(cipher) {
     }
 }
 
+function selectCipher(cipher) {
+    activeCipher = cipher;
+    optionsPanel.render(cipher, (params) => {
+        activeParams = params;
+        runDemo();
+    });
+}
+
 const ciphers = list();
-nav.render(ciphers, runDemo);
-runDemo(ciphers[0]);
+nav.render(ciphers, selectCipher);
+selectCipher(ciphers[0]);
