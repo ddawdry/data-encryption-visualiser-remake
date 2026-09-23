@@ -6,6 +6,7 @@ import * as nav from './ui/nav.js';
 import * as optionsPanel from './ui/optionsPanel.js';
 import './ciphers/caesar.js';
 import './ciphers/vigenere.js';
+import './ciphers/substitution.js';
 
 let activeCipher = null;
 let activeParams = {};
@@ -18,11 +19,15 @@ function runDemo() {
     visualizer.clear();
     stepEngine.start(activeCipher, 'hi', activeParams, 'encrypt');
 
-    let step;
     let stepNumber = 0;
-    while ((step = stepEngine.next()) !== null) {
-        stepNumber++;
-        visualizer.renderStep(step, stepNumber, 'encrypt');
+    try {
+        let step;
+        while ((step = stepEngine.next()) !== null) {
+            stepNumber++;
+            visualizer.renderStep(step, stepNumber, 'encrypt');
+        }
+    } catch (error) {
+        visualizer.showMessage('Error', error.message);
     }
 }
 
