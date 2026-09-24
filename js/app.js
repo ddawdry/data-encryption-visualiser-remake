@@ -8,8 +8,20 @@ import './ciphers/caesar.js';
 import './ciphers/vigenere.js';
 import './ciphers/substitution.js';
 
+const cipherInfo = document.getElementById('cipherInfo');
+
 let activeCipher = null;
 let activeParams = {};
+
+// Description panel driven entirely by module metadata — no per-cipher text lives here.
+function renderCipherInfo(cipher) {
+    cipherInfo.replaceChildren();
+    const heading = document.createElement('h3');
+    heading.textContent = cipher.name;
+    const paragraph = document.createElement('p');
+    paragraph.textContent = cipher.description;
+    cipherInfo.append(heading, paragraph);
+}
 
 // Runs the active cipher against a fixed demo string — proves registry ->
 // stepEngine -> visualizer wiring. Real text input arrives once controls.js
@@ -33,6 +45,7 @@ function runDemo() {
 
 function selectCipher(cipher) {
     activeCipher = cipher;
+    renderCipherInfo(cipher);
     optionsPanel.render(cipher, (params) => {
         activeParams = params;
         runDemo();
