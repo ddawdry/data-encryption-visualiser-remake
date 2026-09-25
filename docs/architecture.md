@@ -51,3 +51,12 @@ See [diagrams/architecture.png](diagrams/architecture.png) for the full module m
 ## UI layout
 
 [diagrams/ui-wireframe.png](diagrams/ui-wireframe.png) shows the region layout of `index.html`: header, mode switch, registry-driven cipher picker, a dynamic options panel generated from the active cipher's `paramsSchema`, description panel, visualization area, step controls, and result box.
+
+## Testing
+
+Cipher modules are tested with Node's built-in test runner (`node:test` + `node:assert/strict`) — no test framework, no extra dependencies. `package.json` only exists to set `"type": "module"` so `import`/`export` work under Node the same way they do in the browser.
+
+- One test file per cipher module in `tests/`, mirroring `js/ciphers/`.
+- Each imports the module for its side-effect registration, then fetches it from `cipherRegistry.get(id)` and calls `encrypt`/`decrypt`/`stepThrough` directly — no DOM involved, since the cipher modules themselves never touch `document`.
+- Run everything with `npm test` or `node --test`.
+- Coverage per module: round-trip (encrypt then decrypt returns the original), case preservation, non-letter pass-through, invalid-input handling, and a `stepThrough` shape check. Anything that was a deliberate porting decision (like Vigenère's key-index behavior) gets a test that locks it in, not just a comment.
