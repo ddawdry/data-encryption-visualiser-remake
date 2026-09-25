@@ -35,6 +35,10 @@ A cipher module is a plain object matching the `CipherModule` typedef documented
 
 A module registers itself with `cipherRegistry.register(module)` when its file is imported. Nothing else in the app — `stepEngine`, the UI, the tests — is edited to add a new cipher; they only ever go through `cipherRegistry.get(id)` / `.list()`.
 
+### Porting note: Vigenère key index
+
+`js/ciphers/vigenere.js` advances the keyword index by the character's absolute position in the text (`i % keyword.length`), including spaces and punctuation — not by the count of letters seen so far. That's not the textbook Vigenère definition, but it's exactly what the original `DataEncrypt.html` did, and it was kept intentionally for parity when ported in. See `tests/vigenere.test.js` for tests that lock in this exact behavior.
+
 ## Runtime data flow
 
 See [diagrams/architecture.png](diagrams/architecture.png) for the full module map. In short:
