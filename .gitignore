@@ -8,3 +8,6 @@ Thumbs.db
 
 # Local-only reference docs (not part of the public repo)
 docs/roadmap.md
+
+# Node (only used to run tests — no build step)
+node_modules/

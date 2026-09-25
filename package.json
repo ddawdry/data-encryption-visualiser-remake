@@ -1,0 +1,8 @@
+{
+    "name": "data-encryption-visualiser-remake",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "test": "node --test"
+    }
+}
