@@ -19,6 +19,7 @@ body {
     border-radius: var(--radius-sm);
     overflow: hidden;
     width: 300px;
+    max-width: 100%;
 }
 
 .cipher-picker {
@@ -41,4 +42,14 @@ body {
 .controls,
 .result-row {
     margin: var(--space-lg) 0;
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: var(--space-sm-md);
+    }
+
+    .main-container {
+        padding: var(--space-md);
+    }
 }
