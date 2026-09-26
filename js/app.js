@@ -71,7 +71,7 @@ function resetRun() {
 function startRun() {
     const text = textInput.value.trim();
     if (!text) {
-        visualizer.showMessage('Heads up', `Please enter some text to ${activeMode}!`);
+        visualizer.showMessage('Heads up', `Please enter some text to ${activeMode}!`, { urgent: true });
         return false;
     }
     lastText = text;
@@ -107,7 +107,7 @@ function handleNext() {
             showCompletionMessage();
         }
     } catch (error) {
-        visualizer.showMessage('Error', error.message);
+        visualizer.showMessage('Error', error.message, { urgent: true });
     }
 }
 
@@ -126,7 +126,7 @@ function handleComplete() {
         resultPanel.update(displayChars, lastText.length - 1, activeMode, true);
         showCompletionMessage();
     } catch (error) {
-        visualizer.showMessage('Error', error.message);
+        visualizer.showMessage('Error', error.message, { urgent: true });
     }
 }
 

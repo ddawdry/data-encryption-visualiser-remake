@@ -20,8 +20,14 @@ export function renderStep(step, stepNumber, mode) {
     showMessage(`${verb}ion Step ${stepNumber}`, step.explanation);
 }
 
-export function showMessage(heading, message) {
+/**
+ * @param {string} heading
+ * @param {string} message
+ * @param {{ urgent?: boolean }} [options] - urgent uses role="alert" (interrupts) instead of "status" (polite)
+ */
+export function showMessage(heading, message, { urgent = false } = {}) {
     stepExplanation.hidden = false;
+    stepExplanation.setAttribute('role', urgent ? 'alert' : 'status');
     stepExplanation.replaceChildren();
 
     const h4 = document.createElement('h4');
