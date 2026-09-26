@@ -1,1 +1,28 @@
-/* Light/dark theme variable overrides */
+/* Light/dark theme variable overrides. Light values live in tokens.css.
+   Auto: follows the OS preference. Explicit: [data-theme] set by themeToggle.js overrides it. */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+        --color-text: #e8e8e8;
+        --color-bg-page: #121212;
+        --color-bg-panel: #1e1e1e;
+        --color-bg-muted: #2a2a2a;
+        --color-bg-surface: #242424;
+        --color-border: #3a3a3a;
+        --color-info-bg: #1f3d24;
+    }
+}
+
+:root[data-theme='dark'] {
+    color-scheme: dark;
+    --color-text: #e8e8e8;
+    --color-bg-page: #121212;
+    --color-bg-panel: #1e1e1e;
+    --color-bg-muted: #2a2a2a;
+    --color-bg-surface: #242424;
+    --color-border: #3a3a3a;
+    --color-info-bg: #1f3d24;
+}
+
+:root[data-theme='light'] {
+    color-scheme: light;
+}

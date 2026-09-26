@@ -1,5 +1,7 @@
 /* Design tokens — extracted from DataEncrypt.html's current look. themes.css overrides these for dark mode. */
 :root {
+    color-scheme: light dark; /* lets native widgets (number spinners, scrollbars) follow the theme too */
+
     /* Colors */
     --color-text: #212121;
     --color-text-inverse: #ffffff;
@@ -17,6 +19,7 @@
     --color-tooltip-text: #ffffff;
 
     --color-highlight: #f5ff3b;
+    --color-on-highlight: #1a1a1a; /* text color for the highlight/changed-block accents — always dark, in both themes */
     --color-info-bg: #cae5ce;
     --color-info-border: #15da4a;
     --color-changed-bg: #81c784;

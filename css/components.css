@@ -76,6 +76,7 @@
 
 .highlight {
     background-color: var(--color-highlight);
+    color: var(--color-on-highlight);
     padding: 2px var(--space-xs);
     border-radius: 3px;
 }
@@ -98,6 +99,18 @@
 
 .char-block.changed {
     background: var(--color-changed-bg);
+    color: var(--color-on-highlight);
+}
+
+.theme-toggle {
+    margin: 0;
+    padding: var(--space-sm-md);
+    background-color: var(--color-bg-muted);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 1.2rem;
+    line-height: 1;
 }
 
 .algo-description {

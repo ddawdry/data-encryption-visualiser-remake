@@ -12,6 +12,13 @@ body {
     box-shadow: var(--shadow-sm);
 }
 
+.header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+}
+
 .switch-container {
     display: flex;
     margin: var(--space-xl) 0;
