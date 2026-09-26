@@ -1,6 +1,14 @@
 /* Reusable component styles (buttons, cards, panels) */
+.cipher-picker-heading {
+    margin: 0 0 var(--space-xs) 0;
+    font-size: var(--font-size-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text);
+}
+
 .cipher-btn {
-    margin: var(--space-xs);
+    margin: 0;
     padding: var(--space-sm-md);
     background-color: var(--color-bg-muted);
     border: none;

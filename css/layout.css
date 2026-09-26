@@ -22,10 +22,17 @@ body {
 }
 
 .cipher-picker {
+    margin: var(--space-lg) 0;
+}
+
+.cipher-picker-group + .cipher-picker-group {
+    margin-top: var(--space-sm-md);
+}
+
+.cipher-picker-buttons {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-xs);
-    margin: var(--space-lg) 0;
 }
 
 .options-panel,
