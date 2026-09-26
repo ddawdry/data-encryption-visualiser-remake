@@ -7,6 +7,8 @@ const CATEGORY_LABELS = {
     analysis: 'Analysis',
 };
 
+let groupHeadingId = 0;
+
 /**
  * @param {import('../core/cipherRegistry.js').CipherModule[]} ciphers
  * @param {(cipher: import('../core/cipherRegistry.js').CipherModule) => void} onSelect
@@ -26,12 +28,16 @@ export function render(ciphers, onSelect) {
         const groupEl = document.createElement('div');
         groupEl.className = 'cipher-picker-group';
 
+        const headingId = `cipher-picker-heading-${groupHeadingId++}`;
         const heading = document.createElement('h4');
         heading.className = 'cipher-picker-heading';
+        heading.id = headingId;
         heading.textContent = CATEGORY_LABELS[category] || category;
 
         const buttonsEl = document.createElement('div');
         buttonsEl.className = 'cipher-picker-buttons';
+        buttonsEl.setAttribute('role', 'group');
+        buttonsEl.setAttribute('aria-labelledby', headingId);
 
         group.forEach((cipher) => {
             const button = document.createElement('button');
@@ -39,6 +45,7 @@ export function render(ciphers, onSelect) {
             button.className = 'cipher-btn';
             button.textContent = cipher.name;
             button.dataset.cipherId = cipher.id;
+            button.setAttribute('aria-pressed', isFirst ? 'true' : 'false');
             if (isFirst) {
                 button.classList.add('active');
                 isFirst = false;
@@ -56,6 +63,10 @@ export function render(ciphers, onSelect) {
 }
 
 function setActive(activeButton) {
-    cipherPicker.querySelectorAll('.cipher-btn').forEach((btn) => btn.classList.remove('active'));
+    cipherPicker.querySelectorAll('.cipher-btn').forEach((btn) => {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-pressed', 'false');
+    });
     activeButton.classList.add('active');
+    activeButton.setAttribute('aria-pressed', 'true');
 }

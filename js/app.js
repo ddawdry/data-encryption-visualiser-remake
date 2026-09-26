@@ -35,17 +35,24 @@ function renderCipherInfo(cipher) {
 
 function renderModeSwitch() {
     modeSwitch.replaceChildren();
+    modeSwitch.setAttribute('role', 'group');
+    modeSwitch.setAttribute('aria-label', 'Encrypt or decrypt');
     ['encrypt', 'decrypt'].forEach((mode) => {
         const button = document.createElement('button');
         button.type = 'button';
         button.className = 'switch-btn';
         button.textContent = mode.charAt(0).toUpperCase() + mode.slice(1);
+        button.setAttribute('aria-pressed', mode === activeMode ? 'true' : 'false');
         if (mode === activeMode) button.classList.add('active');
         button.addEventListener('click', () => {
             if (mode === activeMode) return;
             activeMode = mode;
-            modeSwitch.querySelectorAll('.switch-btn').forEach((btn) => btn.classList.remove('active'));
+            modeSwitch.querySelectorAll('.switch-btn').forEach((btn) => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-pressed', 'false');
+            });
             button.classList.add('active');
+            button.setAttribute('aria-pressed', 'true');
             resetRun();
         });
         modeSwitch.appendChild(button);
