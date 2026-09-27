@@ -22,6 +22,10 @@ let displayChars = [];
 let lastText = '';
 let started = false;
 let finished = false;
+let playTimer = null;
+let stepDelayMs = 700;
+
+const SPEED_DELAYS_MS = { 1: 1500, 2: 1000, 3: 700, 4: 400, 5: 200 };
 
 // Description panel driven entirely by module metadata — no per-cipher text lives here.
 function renderCipherInfo(cipher) {
@@ -59,7 +63,51 @@ function renderModeSwitch() {
     });
 }
 
+function stopPlaying() {
+    if (playTimer !== null) {
+        clearInterval(playTimer);
+        playTimer = null;
+        controls.setPlaying(false);
+    }
+}
+
+function scheduleInterval() {
+    playTimer = setInterval(() => {
+        handleNext();
+        if (finished || !started) {
+            stopPlaying();
+        }
+    }, stepDelayMs);
+}
+
+function startPlaying() {
+    controls.setPlaying(true);
+    handleNext(); // step immediately — setInterval alone would wait a full delay first
+    if (finished || !started) {
+        stopPlaying();
+        return;
+    }
+    scheduleInterval();
+}
+
+function handleTogglePlay() {
+    if (playTimer !== null) {
+        stopPlaying();
+    } else {
+        startPlaying();
+    }
+}
+
+function handleSpeedChange(level) {
+    stepDelayMs = SPEED_DELAYS_MS[level] ?? stepDelayMs;
+    if (playTimer !== null) {
+        clearInterval(playTimer);
+        scheduleInterval(); // re-time only — no extra step from just adjusting speed
+    }
+}
+
 function resetRun() {
+    stopPlaying();
     started = false;
     finished = false;
     displayChars = [];
@@ -112,6 +160,7 @@ function handleNext() {
 }
 
 function handleComplete() {
+    stopPlaying();
     try {
         if (!started || finished) {
             if (!startRun()) return;
@@ -131,6 +180,7 @@ function handleComplete() {
 }
 
 function handleBack() {
+    stopPlaying();
     const step = stepEngine.back();
     if (!step) return;
 
@@ -150,7 +200,13 @@ function selectCipher(cipher) {
 }
 
 textInput.addEventListener('input', resetRun);
-controls.render({ onBack: handleBack, onNext: handleNext, onComplete: handleComplete });
+controls.render({
+    onBack: handleBack,
+    onNext: handleNext,
+    onComplete: handleComplete,
+    onTogglePlay: handleTogglePlay,
+    onSpeedChange: handleSpeedChange,
+});
 renderModeSwitch();
 themeToggle.init();
 
