@@ -7,6 +7,7 @@ import * as optionsPanel from './ui/optionsPanel.js';
 import * as controls from './ui/controls.js';
 import * as resultPanel from './ui/resultPanel.js';
 import * as themeToggle from './ui/themeToggle.js';
+import * as permalink from './ui/permalink.js';
 import './ciphers/caesar.js';
 import './ciphers/vigenere.js';
 import './ciphers/substitution.js';
@@ -26,6 +27,16 @@ let playTimer = null;
 let stepDelayMs = 700;
 
 const SPEED_DELAYS_MS = { 1: 1500, 2: 1000, 3: 700, 4: 400, 5: 200 };
+const initialState = permalink.readState();
+
+function syncPermalink() {
+    permalink.writeState({
+        cipherId: activeCipher ? activeCipher.id : null,
+        mode: activeMode,
+        text: textInput.value,
+        params: activeParams,
+    });
+}
 
 // Description panel driven entirely by module metadata — no per-cipher text lives here.
 function renderCipherInfo(cipher) {
@@ -58,6 +69,7 @@ function renderModeSwitch() {
             button.classList.add('active');
             button.setAttribute('aria-pressed', 'true');
             resetRun();
+            syncPermalink();
         });
         modeSwitch.appendChild(button);
     });
@@ -189,17 +201,21 @@ function handleBack() {
     resultPanel.update(displayChars, stepEngine.getPosition() - 1, activeMode, false);
 }
 
-function selectCipher(cipher) {
+function selectCipher(cipher, initialParams) {
     activeCipher = cipher;
     renderCipherInfo(cipher);
     resetRun();
     optionsPanel.render(cipher, (params) => {
         activeParams = params;
         resetRun();
-    });
+        syncPermalink();
+    }, initialParams);
 }
 
-textInput.addEventListener('input', resetRun);
+textInput.addEventListener('input', () => {
+    resetRun();
+    syncPermalink();
+});
 controls.render({
     onBack: handleBack,
     onNext: handleNext,
@@ -207,9 +223,18 @@ controls.render({
     onTogglePlay: handleTogglePlay,
     onSpeedChange: handleSpeedChange,
 });
+
+if (initialState.mode) {
+    activeMode = initialState.mode;
+}
+if (initialState.text) {
+    textInput.value = initialState.text;
+}
+
 renderModeSwitch();
 themeToggle.init();
 
 const ciphers = list();
-nav.render(ciphers, selectCipher);
-selectCipher(ciphers[0]);
+const startingCipher = ciphers.find((cipher) => cipher.id === initialState.cipherId) || ciphers[0];
+nav.render(ciphers, (cipher) => selectCipher(cipher), startingCipher.id);
+selectCipher(startingCipher, initialState.params);

@@ -12,8 +12,9 @@ let groupHeadingId = 0;
 /**
  * @param {import('../core/cipherRegistry.js').CipherModule[]} ciphers
  * @param {(cipher: import('../core/cipherRegistry.js').CipherModule) => void} onSelect
+ * @param {string} [activeId] - which cipher starts active; falls back to the first one if omitted or unknown
  */
-export function render(ciphers, onSelect) {
+export function render(ciphers, onSelect, activeId) {
     cipherPicker.replaceChildren();
 
     const byCategory = new Map();
@@ -23,7 +24,8 @@ export function render(ciphers, onSelect) {
         byCategory.set(cipher.category, group);
     });
 
-    let isFirst = true;
+    const resolvedActiveId = ciphers.some((cipher) => cipher.id === activeId) ? activeId : ciphers[0]?.id;
+
     byCategory.forEach((group, category) => {
         const groupEl = document.createElement('div');
         groupEl.className = 'cipher-picker-group';
@@ -45,10 +47,10 @@ export function render(ciphers, onSelect) {
             button.className = 'cipher-btn';
             button.textContent = cipher.name;
             button.dataset.cipherId = cipher.id;
-            button.setAttribute('aria-pressed', isFirst ? 'true' : 'false');
-            if (isFirst) {
+            const isActive = cipher.id === resolvedActiveId;
+            button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+            if (isActive) {
                 button.classList.add('active');
-                isFirst = false;
             }
             button.addEventListener('click', () => {
                 setActive(button);
