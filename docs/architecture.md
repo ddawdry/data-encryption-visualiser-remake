@@ -41,6 +41,12 @@ Most ciphers are fine with the generic char-block diff in `visualizer.js` (`oldC
 
 This stays a rare escape hatch, not the default path — only reach for it when the generic diff genuinely can't show what's happening (see `js/ciphers/railFence.js` for the zigzag-grid example).
 
+### A CipherStep's index is always "one per input character" — even when lengths don't match
+
+`stepThrough` always yields exactly `text.length` steps, one per character of whatever was typed in — this is what lets `app.js` track progress and "done" state generically for every cipher, without knowing anything about how a specific cipher works. For a 1:1 cipher (Caesar, Vigenère, ...) that's also one step per output character. For Polybius Square, it isn't: one input letter produces two output digits (encrypt), and two input digits collapse into one output letter (decrypt).
+
+The trick is that `displayChars[step.index]` (see "Runtime data flow" below) doesn't require `newChar` to be a single character — it's just a string slot. So `js/ciphers/polybius.js` yields a *variable-width contribution* per input position: encrypt's `newChar` can be a 2-digit string; decrypt's `newChar` is `''` for the first digit of a pair (nothing resolved yet) and the decoded letter for the second. `oldChar` always stays "whatever was in that slot before this step" (the original input character), so `historyStack`/"Back" still reverts correctly with zero special-casing — the generic engine never needed to know any of this.
+
 ### Porting note: Vigenère key index
 
 `js/ciphers/vigenere.js` advances the keyword index by the character's absolute position in the text (`i % keyword.length`), including spaces and punctuation — not by the count of letters seen so far. That's not the textbook Vigenère definition, but it's exactly what the original `DataEncrypt.html` did, and it was kept intentionally for parity when ported in. See `tests/vigenere.test.js` for tests that lock in this exact behavior.

@@ -135,6 +135,27 @@
     padding: 0;
 }
 
+.polybius-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 2em);
+    grid-template-rows: repeat(5, 2em);
+    gap: 2px;
+    font-family: monospace;
+    width: fit-content;
+}
+
+.polybius-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg-muted);
+    border-radius: var(--radius-sm);
+}
+
+.polybius-cell.highlight {
+    padding: 0;
+}
+
 .algo-description {
     margin: var(--space-lg) 0;
     padding: var(--space-lg);
