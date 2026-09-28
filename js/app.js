@@ -12,6 +12,7 @@ import './ciphers/caesar.js';
 import './ciphers/vigenere.js';
 import './ciphers/substitution.js';
 import './ciphers/rot13.js';
+import './ciphers/atbash.js';
 
 const cipherInfo = document.getElementById('cipherInfo');
 const textInput = document.getElementById('textInput');
