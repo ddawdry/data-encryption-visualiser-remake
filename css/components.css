@@ -113,6 +113,28 @@
     line-height: 1;
 }
 
+.rail-fence-grid {
+    display: grid;
+    gap: 2px;
+    font-family: monospace;
+    font-size: var(--font-size-sm);
+}
+
+.rail-fence-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+}
+
+.rail-fence-cell:not(:empty) {
+    background: var(--color-bg-muted);
+}
+
+.rail-fence-cell.highlight {
+    padding: 0;
+}
+
 .algo-description {
     margin: var(--space-lg) 0;
     padding: var(--space-lg);

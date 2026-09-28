@@ -5,7 +5,7 @@
 - `index.html` — shell page, mounts the app, no inline logic.
 - `css/` — `tokens.css` (design variables), `base.css`, `layout.css`, `components.css`, `themes.css` (light/dark via CSS vars).
 - `js/core/` — `cipherRegistry.js`, `stepEngine.js`, `historyStack.js`.
-- `js/ui/` — `visualizer.js`, `nav.js`, `controls.js`, `resultPanel.js`, `themeToggle.js`, `permalink.js`, `historyPanel.js`.
+- `js/ui/` — `visualizer.js`, `nav.js`, `controls.js`, `resultPanel.js`, `themeToggle.js`, `permalink.js`, `historyPanel.js`, `cipherVisualization.js` (dispatches to a cipher's optional `visualize`, see below).
 - `js/ciphers/` — one module per cipher.
 - `js/analysis/` — `bruteForceCaesar.js`, `frequencyAnalysis.js`, `kasiski.js`.
 - `tests/` — `node --test`, one file per cipher module.
@@ -34,6 +34,12 @@ A cipher module is a plain object matching the `CipherModule` typedef documented
 ```
 
 A module registers itself with `cipherRegistry.register(module)` when its file is imported. Nothing else in the app — `stepEngine`, the UI, the tests — is edited to add a new cipher; they only ever go through `cipherRegistry.get(id)` / `.list()`.
+
+### Optional: cipher-specific visualization
+
+Most ciphers are fine with the generic char-block diff in `visualizer.js` (`oldChar → newChar` plus an explanation). Some aren't — a transposition cipher like Rail Fence rearranges characters rather than changing them, so a plain diff doesn't show the mechanism. For those, a cipher module can add an optional `visualize(container, { text, params, mode, currentIndex })` function to its registration object. `js/ui/cipherVisualization.js` calls it after every step if present, into a dedicated container in `index.html` — no `switch` statement anywhere checking "is this cipher special"; the module just opts in or doesn't.
+
+This stays a rare escape hatch, not the default path — only reach for it when the generic diff genuinely can't show what's happening (see `js/ciphers/railFence.js` for the zigzag-grid example).
 
 ### Porting note: Vigenère key index
 

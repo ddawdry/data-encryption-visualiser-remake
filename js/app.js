@@ -8,11 +8,13 @@ import * as controls from './ui/controls.js';
 import * as resultPanel from './ui/resultPanel.js';
 import * as themeToggle from './ui/themeToggle.js';
 import * as permalink from './ui/permalink.js';
+import * as cipherVisualization from './ui/cipherVisualization.js';
 import './ciphers/caesar.js';
 import './ciphers/vigenere.js';
 import './ciphers/substitution.js';
 import './ciphers/rot13.js';
 import './ciphers/atbash.js';
+import './ciphers/railFence.js';
 
 const cipherInfo = document.getElementById('cipherInfo');
 const textInput = document.getElementById('textInput');
@@ -120,6 +122,16 @@ function handleSpeedChange(level) {
     }
 }
 
+function updateCipherVisualization(currentIndex) {
+    if (!activeCipher) return;
+    cipherVisualization.render(activeCipher, {
+        text: lastText,
+        params: activeParams,
+        mode: activeMode,
+        currentIndex,
+    });
+}
+
 function resetRun() {
     stopPlaying();
     started = false;
@@ -128,6 +140,7 @@ function resetRun() {
     lastText = '';
     visualizer.clear();
     resultPanel.reset(activeMode);
+    cipherVisualization.clear();
 }
 
 function startRun() {
@@ -164,6 +177,7 @@ function handleNext() {
         visualizer.renderStep(step, stepEngine.getPosition(), activeMode);
         finished = stepEngine.getPosition() >= lastText.length;
         resultPanel.update(displayChars, step.index, activeMode, finished);
+        updateCipherVisualization(step.index);
 
         if (finished) {
             showCompletionMessage();
@@ -187,6 +201,7 @@ function handleComplete() {
 
         finished = true;
         resultPanel.update(displayChars, lastText.length - 1, activeMode, true);
+        updateCipherVisualization(lastText.length - 1);
         showCompletionMessage();
     } catch (error) {
         visualizer.showMessage('Error', error.message, { urgent: true });
@@ -200,7 +215,9 @@ function handleBack() {
 
     displayChars[step.index] = step.oldChar;
     finished = false;
-    resultPanel.update(displayChars, stepEngine.getPosition() - 1, activeMode, false);
+    const position = stepEngine.getPosition();
+    resultPanel.update(displayChars, position - 1, activeMode, false);
+    updateCipherVisualization(position > 0 ? position - 1 : null);
 }
 
 function selectCipher(cipher, initialParams) {

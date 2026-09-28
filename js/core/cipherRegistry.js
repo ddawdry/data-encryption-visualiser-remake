@@ -27,6 +27,9 @@
  * @property {(text: string, params: Object) => string} encrypt - full encrypt, no animation
  * @property {(text: string, params: Object) => string} decrypt - full decrypt, no animation
  * @property {(text: string, params: Object, mode: 'encrypt'|'decrypt') => Generator<CipherStep>} stepThrough - yields one CipherStep per character
+ * @property {(container: HTMLElement, context: { text: string, params: Object, mode: 'encrypt'|'decrypt', currentIndex: number }) => void} [visualize] - optional: draws a cipher-specific
+ *   visualization (e.g. a zigzag grid) into `container`, called after each step. Ciphers that don't need one
+ *   (most of them) simply omit this — the generic char-block diff in visualizer.js is enough on its own.
  */
 
 // Ciphers self-register here (see the CipherModule typedef above).

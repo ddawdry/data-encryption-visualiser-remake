@@ -51,6 +51,11 @@ body {
     margin: var(--space-lg) 0;
 }
 
+.cipher-visualization {
+    margin: var(--space-lg) 0;
+    overflow-x: auto;
+}
+
 @media (max-width: 480px) {
     body {
         padding: var(--space-sm-md);
