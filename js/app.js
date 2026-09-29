@@ -17,6 +17,7 @@ import './ciphers/atbash.js';
 import './ciphers/railFence.js';
 import './ciphers/polybius.js';
 import './ciphers/playfair.js';
+import './ciphers/hill.js';
 
 const cipherInfo = document.getElementById('cipherInfo');
 const textInput = document.getElementById('textInput');

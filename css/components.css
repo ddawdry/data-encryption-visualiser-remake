@@ -156,6 +156,41 @@
     padding: 0;
 }
 
+.hill-viz {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-lg);
+}
+
+.hill-matrix {
+    display: grid;
+    grid-template-columns: repeat(2, 2.2em);
+    grid-template-rows: repeat(2, 2.2em);
+    gap: 2px;
+    font-family: monospace;
+}
+
+.hill-vector {
+    display: grid;
+    grid-template-rows: repeat(2, 2.2em);
+    gap: 2px;
+    font-family: monospace;
+}
+
+.hill-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2em;
+    background: var(--color-bg-muted);
+    border-radius: var(--radius-sm);
+}
+
+.hill-cell.highlight {
+    padding: 0;
+}
+
 .algo-description {
     margin: var(--space-lg) 0;
     padding: var(--space-lg);
