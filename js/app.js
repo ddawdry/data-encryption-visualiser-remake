@@ -20,6 +20,7 @@ import './ciphers/playfair.js';
 import './ciphers/hill.js';
 import './ciphers/xor.js';
 import './ciphers/onetimepad.js';
+import './ciphers/encoding.js';
 
 const cipherInfo = document.getElementById('cipherInfo');
 const textInput = document.getElementById('textInput');

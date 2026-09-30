@@ -4,6 +4,7 @@ const cipherPicker = document.getElementById('cipherPicker');
 const CATEGORY_LABELS = {
     classical: 'Classical',
     modern: 'Modern',
+    encoding: 'Encoding — Not Encryption',
     analysis: 'Analysis',
 };
 

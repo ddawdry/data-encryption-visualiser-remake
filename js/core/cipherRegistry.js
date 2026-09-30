@@ -21,7 +21,7 @@
  * @typedef {Object} CipherModule
  * @property {string} id - unique id, e.g. 'caesar'
  * @property {string} name - display name, e.g. 'Caesar Cipher'
- * @property {string} category - grouping for the cipher picker, e.g. 'classical' | 'modern' | 'analysis'
+ * @property {string} category - grouping for the cipher picker, e.g. 'classical' | 'modern' | 'encoding' | 'analysis'
  * @property {string} description - short blurb shown in the description panel
  * @property {CipherParamField[]} paramsSchema - declarative fields the options panel renders
  * @property {(text: string, params: Object) => string} encrypt - full encrypt, no animation

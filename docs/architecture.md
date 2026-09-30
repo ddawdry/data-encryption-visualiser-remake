@@ -55,6 +55,12 @@ Textbook Playfair inserts a filler letter ('X') when a digraph would repeat a le
 
 Same family of problem as Polybius and Playfair: textbook Hill pads an odd leftover letter to complete the final pair, but inserting a character breaks the "one step per input character" rule. Playfair solved this by pairing a leftover letter with itself — Hill can't use that trick, because its matrix produces two generally-*different* output numbers for a pair, and only one of them could ever be written to the single real position. `js/ciphers/hill.js` instead leaves a lone leftover letter unchanged (normalized to uppercase, for consistency with every paired letter, which loses case through the matrix math regardless).
 
+### Design note: Base64/Hex live in one file, and in their own category
+
+`js/ciphers/encoding.js` registers both `base64` and `hex` — the only file here that registers more than one cipher, because the roadmap bundles them as a single checkpoint and they share one job: making "this isn't encryption" visible, not just stated in prose. They get their own `'encoding'` category (`nav.js`'s picker heading literally reads "Encoding — Not Encryption"), separate from `'classical'`/`'modern'`, so the UI itself carries the distinction.
+
+Base64 also stretches the "one step per input character" model further than Polybius did: it works on 3-byte input groups producing 4-character output groups, not a 1:1 or 1:2 mapping. The group's full result is written to the *first* position's `newChar` (other positions in the group contribute `''`), but — importantly — `oldChar` still stays the single original character at that exact slot, not the whole group, since `oldChar` is what `historyStack`/"Back" reverts to. Only the explanation text mentions the full group.
+
 ### Porting note: Vigenère key index
 
 `js/ciphers/vigenere.js` advances the keyword index by the character's absolute position in the text (`i % keyword.length`), including spaces and punctuation — not by the count of letters seen so far. That's not the textbook Vigenère definition, but it's exactly what the original `DataEncrypt.html` did, and it was kept intentionally for parity when ported in. See `tests/vigenere.test.js` for tests that lock in this exact behavior.
