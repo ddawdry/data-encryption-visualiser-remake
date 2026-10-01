@@ -69,6 +69,12 @@ RSA's ciphertext numbers don't have a fixed width like Polybius's digit pairs or
 
 Diffie-Hellman is a key-*exchange* protocol, not an encrypt/decrypt operation — there's no "text" being transformed by it, which doesn't fit the `CipherModule` contract at all. `js/ciphers/diffieHellman.js` splits the concept in two: the actual exchange (Alice/Bob, their private keys, the public values they trade, and the shared secret both derive) lives entirely in `visualize()`, always fully shown since the protocol completes instantly regardless of which message character is being stepped through — same approach as RSA's key panel. The derived shared secret is then used as an ordinary Caesar shift on the typed message, which both demonstrates what key exchange is actually *for* in practice, and keeps `stepThrough` perfectly consistent with every other cipher's one-step-per-character model — no special-casing needed anywhere else in the app.
 
+### Design note: AES is schematic, not spec-accurate — by design
+
+`js/ciphers/aes.js` shows the same four STAGES real AES uses (SubBytes, ShiftRows, MixColumns, AddRoundKey) on a 4x4 block of 16 letters, but with simplified, still-genuinely-invertible stand-ins: a fixed substitution table instead of AES's real GF(2^8) S-box, a simple column rotation instead of AES's polynomial MixColumns math, and mod-26 addition instead of byte-level XOR. ShiftRows is implemented faithfully (it's pure rearrangement, no finite-field math needed). This was the intended scope from the start — the goal is showing *why* AES needs several different kinds of operation working together, not reproducing the real cipher.
+
+Leftover letters that don't fill a complete 16-letter block are left unchanged, same pattern as Hill cipher's lone leftover letter — and like Hill, they're still normalized to uppercase for consistency with the letters that *do* get processed (caught the same mixed-case bug here as in Hill cipher: testing it showed `"...Dog, Again!"`'s leftover letters keeping their original case while the processed block came out uppercase).
+
 ### Porting note: Vigenère key index
 
 `js/ciphers/vigenere.js` advances the keyword index by the character's absolute position in the text (`i % keyword.length`), including spaces and punctuation — not by the count of letters seen so far. That's not the textbook Vigenère definition, but it's exactly what the original `DataEncrypt.html` did, and it was kept intentionally for parity when ported in. See `tests/vigenere.test.js` for tests that lock in this exact behavior.

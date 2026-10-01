@@ -257,6 +257,42 @@
     font-style: italic;
 }
 
+.aes-stages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    overflow-x: auto;
+}
+
+.aes-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.aes-stage-label {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-align: center;
+}
+
+.aes-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1.8em);
+    grid-template-rows: repeat(4, 1.8em);
+    gap: 2px;
+    font-family: monospace;
+}
+
+.aes-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg-muted);
+    border-radius: var(--radius-sm);
+}
+
 .algo-description {
     margin: var(--space-lg) 0;
     padding: var(--space-lg);
