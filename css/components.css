@@ -213,6 +213,50 @@
     font-weight: 600;
 }
 
+.dh-exchange {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm-md);
+    font-size: var(--font-size-sm);
+}
+
+.dh-public-info {
+    font-weight: 600;
+}
+
+.dh-parties {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+}
+
+.dh-party {
+    flex: 1;
+    min-width: 180px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    padding: var(--space-sm-md);
+    background: var(--color-bg-muted);
+    border-radius: var(--radius-sm);
+}
+
+.dh-party-name {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.dh-shared {
+    font-weight: 600;
+    color: var(--color-accent);
+}
+
+.dh-arrow {
+    text-align: center;
+    font-style: italic;
+}
+
 .algo-description {
     margin: var(--space-lg) 0;
     padding: var(--space-lg);

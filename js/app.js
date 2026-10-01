@@ -22,6 +22,7 @@ import './ciphers/xor.js';
 import './ciphers/onetimepad.js';
 import './ciphers/encoding.js';
 import './ciphers/rsa.js';
+import './ciphers/diffieHellman.js';
 
 const cipherInfo = document.getElementById('cipherInfo');
 const textInput = document.getElementById('textInput');
