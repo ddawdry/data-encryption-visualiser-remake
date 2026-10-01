@@ -61,6 +61,10 @@ Same family of problem as Polybius and Playfair: textbook Hill pads an odd lefto
 
 Base64 also stretches the "one step per input character" model further than Polybius did: it works on 3-byte input groups producing 4-character output groups, not a 1:1 or 1:2 mapping. The group's full result is written to the *first* position's `newChar` (other positions in the group contribute `''`), but — importantly — `oldChar` still stays the single original character at that exact slot, not the whole group, since `oldChar` is what `historyStack`/"Back" reverts to. Only the explanation text mentions the full group.
 
+### Design note: RSA's variable-width ciphertext
+
+RSA's ciphertext numbers don't have a fixed width like Polybius's digit pairs or Hex's byte pairs — encrypting 'A' might give `0`, encrypting 'Z' might give `166`. A fixed-width parser can't tell where one number ends and the next begins, so `js/ciphers/rsa.js` separates them with spaces and has decrypt scan for runs of digits as tokens instead. To keep that parsing unambiguous, non-letter characters (including spaces you typed) aren't preserved in the ciphertext at all — they contribute `''`, the same zero-width-step technique Polybius and Base64 use, just reached for a different reason (parsing safety, not grouping). This is a deliberate, documented limitation: this demo only encrypts letters.
+
 ### Porting note: Vigenère key index
 
 `js/ciphers/vigenere.js` advances the keyword index by the character's absolute position in the text (`i % keyword.length`), including spaces and punctuation — not by the count of letters seen so far. That's not the textbook Vigenère definition, but it's exactly what the original `DataEncrypt.html` did, and it was kept intentionally for parity when ported in. See `tests/vigenere.test.js` for tests that lock in this exact behavior.

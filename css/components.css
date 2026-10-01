@@ -191,6 +191,28 @@
     padding: 0;
 }
 
+.rsa-keys {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    font-family: monospace;
+    font-size: var(--font-size-sm);
+}
+
+.rsa-key-row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--color-bg-muted);
+    border-radius: var(--radius-sm);
+}
+
+.rsa-active-key {
+    margin-top: var(--space-xs);
+    font-weight: 600;
+}
+
 .algo-description {
     margin: var(--space-lg) 0;
     padding: var(--space-lg);
