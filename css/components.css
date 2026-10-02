@@ -363,3 +363,82 @@
     font-family: monospace;
     overflow-wrap: anywhere;
 }
+
+.freq-chart {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm-md);
+}
+
+.freq-legend {
+    display: flex;
+    gap: var(--space-md);
+    font-size: var(--font-size-sm);
+}
+
+.freq-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.freq-swatch {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+.freq-swatch.freq-observed {
+    background: var(--color-chart-series-1);
+}
+
+.freq-swatch.freq-baseline {
+    background: var(--color-chart-series-2);
+}
+
+.freq-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 120px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.freq-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 1.8em;
+    flex: 0 0 auto;
+    height: 100%;
+}
+
+.freq-bar-pair {
+    display: flex;
+    align-items: flex-end;
+    gap: 1px;
+    width: 100%;
+    flex: 1;
+}
+
+.freq-bar {
+    flex: 1;
+    min-height: 1px;
+    border-radius: 2px 2px 0 0;
+}
+
+.freq-bar.freq-observed {
+    background: var(--color-chart-series-1);
+}
+
+.freq-bar.freq-baseline {
+    background: var(--color-chart-series-2);
+}
+
+.freq-letter-label {
+    font-size: var(--font-size-sm);
+    margin-top: var(--space-xs);
+}

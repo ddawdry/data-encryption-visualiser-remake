@@ -24,6 +24,10 @@
     --color-info-border: #15da4a;
     --color-changed-bg: #81c784;
 
+    /* Chart series (validated colorblind-safe pair, passes in both light and dark — see dataviz skill) */
+    --color-chart-series-1: #43A047;
+    --color-chart-series-2: #2563EB;
+
     /* Typography */
     --font-family: Arial, sans-serif;
     --line-height: 1.6;

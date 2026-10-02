@@ -26,6 +26,7 @@ import './ciphers/diffieHellman.js';
 import './ciphers/aes.js';
 import './ciphers/sha256.js';
 import './ciphers/bruteForceCaesar.js';
+import './ciphers/frequencyAnalysis.js';
 
 const cipherInfo = document.getElementById('cipherInfo');
 const textInput = document.getElementById('textInput');
