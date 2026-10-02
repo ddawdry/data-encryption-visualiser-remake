@@ -24,6 +24,7 @@ import './ciphers/encoding.js';
 import './ciphers/rsa.js';
 import './ciphers/diffieHellman.js';
 import './ciphers/aes.js';
+import './ciphers/sha256.js';
 
 const cipherInfo = document.getElementById('cipherInfo');
 const textInput = document.getElementById('textInput');

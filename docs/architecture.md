@@ -75,6 +75,12 @@ Diffie-Hellman is a key-*exchange* protocol, not an encrypt/decrypt operation �
 
 Leftover letters that don't fill a complete 16-letter block are left unchanged, same pattern as Hill cipher's lone leftover letter — and like Hill, they're still normalized to uppercase for consistency with the letters that *do* get processed (caught the same mixed-case bug here as in Hill cipher: testing it showed `"...Dog, Again!"`'s leftover letters keeping their original case while the processed block came out uppercase).
 
+### Design note: SHA-256 is a hash, not a cipher — hand-rolled, not native
+
+`js/ciphers/sha256.js` is the only module that isn't a cipher at all: hashing is one-way, so `encrypt`/`decrypt` both just compute the same hash. It's implemented by hand rather than via the browser's native `crypto.subtle.digest()`, because that API is asynchronous (returns a Promise) and this app's entire step engine is synchronous by design — making one cipher async would mean either rewriting `stepEngine` for everything or giving this one module a special-cased code path, neither worth it for a hash demo. Verified against the standard SHA-256 test vectors (`""` and `"abc"`) and cross-checked against Node's native `crypto` module for strings containing multi-byte UTF-8 characters (an accented letter, an emoji requiring a UTF-16 surrogate pair) — hand-rolled cryptographic code is exactly where subtle bugs hide, so this one got more external verification than most ciphers here.
+
+Only the *last* step of `stepThrough` carries the actual 64-character hash (every earlier step contributes `''`), since the hash can't be known until the whole message is in — same zero-width-step technique as Polybius/Base64/RSA, just because the hash genuinely depends on the entire input rather than any single position.
+
 ### Porting note: Vigenère key index
 
 `js/ciphers/vigenere.js` advances the keyword index by the character's absolute position in the text (`i % keyword.length`), including spaces and punctuation — not by the count of letters seen so far. That's not the textbook Vigenère definition, but it's exactly what the original `DataEncrypt.html` did, and it was kept intentionally for parity when ported in. See `tests/vigenere.test.js` for tests that lock in this exact behavior.

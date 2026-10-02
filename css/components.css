@@ -293,6 +293,38 @@
     border-radius: var(--radius-sm);
 }
 
+.sha256-avalanche {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm-md);
+    font-size: var(--font-size-sm);
+}
+
+.sha256-note {
+    font-style: italic;
+}
+
+.sha256-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-xs);
+}
+
+.sha256-label {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.sha256-hash {
+    font-family: monospace;
+    word-break: break-all;
+}
+
+.sha256-stat {
+    font-weight: 600;
+}
+
 .algo-description {
     margin: var(--space-lg) 0;
     padding: var(--space-lg);
