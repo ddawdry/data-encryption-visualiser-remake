@@ -442,3 +442,26 @@
     font-size: var(--font-size-sm);
     margin-top: var(--space-xs);
 }
+
+.kasiski-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm-md);
+}
+
+.kasiski-text {
+    font-family: monospace;
+    overflow-wrap: anywhere;
+    line-height: 2;
+}
+
+.kasiski-summary {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    font-size: var(--font-size-sm);
+}
+
+.kasiski-guess {
+    font-weight: 600;
+}

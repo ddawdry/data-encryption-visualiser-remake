@@ -81,6 +81,12 @@ Leftover letters that don't fill a complete 16-letter block are left unchanged, 
 
 Only the *last* step of `stepThrough` carries the actual 64-character hash (every earlier step contributes `''`), since the hash can't be known until the whole message is in — same zero-width-step technique as Polybius/Base64/RSA, just because the hash genuinely depends on the entire input rather than any single position.
 
+### Design note: Kasiski must measure distances in absolute position, not letter count
+
+`js/ciphers/kasiski.js` measures the distance between repeated ciphertext sequences in **absolute text position**, including spaces and punctuation — not letter-only count. This matters because it has to match whatever periodicity this app's own `vigenere.js` actually produces, and that cipher deliberately cycles its key by absolute position (the porting note above). Measuring in letter-only position would silently give a wrong key-length estimate for any ciphertext containing spaces, since the real repeat spacing in that ciphertext is governed by absolute position, not letter count. Verified against real output from this app's own Vigenère cipher, not just a hand-constructed string, in `tests/kasiski.test.js`.
+
+Also worth noting: a single repeated distance often can't distinguish between a factor and its multiples (e.g. 10 could mean key length 2, 5, or 10) — that's a genuine limitation of Kasiski examination, not a bug, so the tool reports the GCD's full factor list as candidates rather than overconfidently picking one answer.
+
 ### Porting note: Vigenère key index
 
 `js/ciphers/vigenere.js` advances the keyword index by the character's absolute position in the text (`i % keyword.length`), including spaces and punctuation — not by the count of letters seen so far. That's not the textbook Vigenère definition, but it's exactly what the original `DataEncrypt.html` did, and it was kept intentionally for parity when ported in. See `tests/vigenere.test.js` for tests that lock in this exact behavior.
