@@ -87,6 +87,10 @@ Only the *last* step of `stepThrough` carries the actual 64-character hash (ever
 
 Also worth noting: a single repeated distance often can't distinguish between a factor and its multiples (e.g. 10 could mean key length 2, 5, or 10) — that's a genuine limitation of Kasiski examination, not a bug, so the tool reports the GCD's full factor list as candidates rather than overconfidently picking one answer.
 
+### Design note: the Canvas animation is deliberately `aria-hidden`
+
+`js/ui/visualizer.js` renders the char-block animation on a `<canvas>` (for a real animated entrance per block, via `requestAnimationFrame`) rather than as DOM elements. Canvas content has no text for screen readers to read — normally a real accessibility regression. It's acceptable here specifically because the *same* information (which character changed, and why) is already announced through `#stepExplanation`'s live region, built in checkpoint 30 — the canvas is a visual supplement for sighted users, not the only place the information exists. `index.html` marks it `aria-hidden="true"` to make that relationship explicit rather than leaving an unlabeled, silently-inaccessible element. This reasoning wouldn't hold if the canvas were the *only* source of some information — it only applies because the live region already fully covers it.
+
 ### Porting note: Vigenère key index
 
 `js/ciphers/vigenere.js` advances the keyword index by the character's absolute position in the text (`i % keyword.length`), including spaces and punctuation — not by the count of letters seen so far. That's not the textbook Vigenère definition, but it's exactly what the original `DataEncrypt.html` did, and it was kept intentionally for parity when ported in. See `tests/vigenere.test.js` for tests that lock in this exact behavior.

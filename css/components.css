@@ -89,17 +89,9 @@
     border-radius: var(--radius-sm);
 }
 
-.char-block {
-    display: inline-block;
-    padding: var(--space-md);
-    margin: var(--space-xs);
-    background: var(--color-bg-muted);
-    border-radius: var(--radius-sm);
-}
-
-.char-block.changed {
-    background: var(--color-changed-bg);
-    color: var(--color-on-highlight);
+.animation-canvas {
+    display: block;
+    width: 100%;
 }
 
 .theme-toggle {
