@@ -10,6 +10,7 @@ import * as themeToggle from './ui/themeToggle.js';
 import * as permalink from './ui/permalink.js';
 import * as cipherVisualization from './ui/cipherVisualization.js';
 import * as comparisonPanel from './ui/comparisonPanel.js';
+import * as historyPanel from './ui/historyPanel.js';
 import './ciphers/caesar.js';
 import './ciphers/vigenere.js';
 import './ciphers/substitution.js';
@@ -210,7 +211,16 @@ function startRun() {
 
 function showCompletionMessage() {
     const verb = activeMode.charAt(0).toUpperCase() + activeMode.slice(1);
-    visualizer.showMessage(`${verb}ion Complete!`, `Original text: ${lastText} — New text: ${displayChars.join('')}`);
+    const result = displayChars.join('');
+    visualizer.showMessage(`${verb}ion Complete!`, `Original text: ${lastText} — New text: ${result}`);
+    historyPanel.addEntry({
+        cipherId: activeCipher.id,
+        cipherName: activeCipher.name,
+        mode: activeMode,
+        text: lastText,
+        params: activeParams,
+        result,
+    });
 }
 
 function handleNext() {
@@ -269,6 +279,19 @@ function handleBack() {
     updateCipherVisualization(position > 0 ? position - 1 : null);
 }
 
+function handleHistorySelect(entry) {
+    const cipher = ciphers.find((c) => c.id === entry.cipherId);
+    if (!cipher) return;
+
+    activeMode = entry.mode;
+    textInput.value = entry.text;
+    renderModeSwitch();
+    nav.render(ciphers, (c) => selectCipher(c), cipher.id);
+    selectCipher(cipher, entry.params);
+    syncPermalink();
+    updateComparison();
+}
+
 function selectCipher(cipher, initialParams) {
     activeCipher = cipher;
     renderCipherInfo(cipher);
@@ -312,3 +335,5 @@ comparisonPanel.init(ciphers, {
     onToggle: updateComparison,
     onCipherChange: updateComparison,
 });
+
+historyPanel.init(handleHistorySelect);

@@ -48,7 +48,8 @@ body {
 .text-input-row,
 .controls,
 .result-row,
-.comparison-panel {
+.comparison-panel,
+.history-panel {
     margin: var(--space-lg) 0;
 }
 

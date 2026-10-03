@@ -477,3 +477,41 @@
 .comparison-error {
     color: var(--color-error);
 }
+
+.history-panel h3 {
+    margin-bottom: var(--space-sm);
+}
+
+.history-list {
+    list-style: none;
+    margin: 0 0 var(--space-sm-md) 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.history-entry {
+    width: 100%;
+    text-align: left;
+    background-color: var(--color-bg-muted);
+    border: none;
+    padding: var(--space-sm-md);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+}
+
+.history-entry:hover {
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+}
+
+.history-clear {
+    background: none;
+    border: 1px solid var(--color-border);
+    padding: var(--space-xs) var(--space-sm-md);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+}
