@@ -457,3 +457,23 @@
 .kasiski-guess {
     font-weight: 600;
 }
+
+.comparison-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    cursor: pointer;
+}
+
+.comparison-result {
+    flex-basis: 100%;
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    padding: var(--space-sm-md);
+    border-radius: var(--radius-sm);
+    min-height: 1.6em;
+}
+
+.comparison-error {
+    color: var(--color-error);
+}

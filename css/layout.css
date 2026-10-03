@@ -47,8 +47,17 @@ body {
 .visualization-container,
 .text-input-row,
 .controls,
-.result-row {
+.result-row,
+.comparison-panel {
     margin: var(--space-lg) 0;
+}
+
+.comparison-controls {
+    margin-top: var(--space-sm-md);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-sm);
 }
 
 .cipher-visualization {

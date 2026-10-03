@@ -42,6 +42,18 @@
             <p id="progressInfo">Ready to start!</p>
             <div id="resultBox">Results will show here</div>
         </div>
+
+        <div class="comparison-panel">
+            <label class="comparison-toggle-label">
+                <input type="checkbox" id="compareToggle">
+                Compare with another cipher
+            </label>
+            <div id="comparisonControls" class="comparison-controls" hidden>
+                <label for="comparisonCipherSelect">Compare with:</label>
+                <select id="comparisonCipherSelect"></select>
+                <div id="comparisonResult" class="comparison-result"></div>
+            </div>
+        </div>
     </div>
 
     <script type="module" src="js/app.js"></script>

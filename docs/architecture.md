@@ -91,6 +91,10 @@ Also worth noting: a single repeated distance often can't distinguish between a 
 
 `js/ui/visualizer.js` renders the char-block animation on a `<canvas>` (for a real animated entrance per block, via `requestAnimationFrame`) rather than as DOM elements. Canvas content has no text for screen readers to read — normally a real accessibility regression. It's acceptable here specifically because the *same* information (which character changed, and why) is already announced through `#stepExplanation`'s live region, built in checkpoint 30 — the canvas is a visual supplement for sighted users, not the only place the information exists. `index.html` marks it `aria-hidden="true"` to make that relationship explicit rather than leaving an unlabeled, silently-inaccessible element. This reasoning wouldn't hold if the canvas were the *only* source of some information — it only applies because the live region already fully covers it.
 
+### Design note: comparison mode shows full results, not a synced animation
+
+`js/ui/comparisonPanel.js` lets you compare the active cipher against a second one on the same text, but deliberately shows the second cipher's complete result (via its plain `encrypt`/`decrypt`, using its own default params) rather than a second synced step-by-step animation. Properly animating two ciphers side by side would mean a second `stepEngine`, `historyStack`, options panel, and visualization panel — essentially doubling the app's entire interactive surface for one checkpoint. The chosen scope (same text and mode, two full results, side by side) still delivers the actual comparison the checkpoint asks for, just without the animation on the second side.
+
 ### Porting note: Vigenère key index
 
 `js/ciphers/vigenere.js` advances the keyword index by the character's absolute position in the text (`i % keyword.length`), including spaces and punctuation — not by the count of letters seen so far. That's not the textbook Vigenère definition, but it's exactly what the original `DataEncrypt.html` did, and it was kept intentionally for parity when ported in. See `tests/vigenere.test.js` for tests that lock in this exact behavior.

@@ -9,6 +9,7 @@ import * as resultPanel from './ui/resultPanel.js';
 import * as themeToggle from './ui/themeToggle.js';
 import * as permalink from './ui/permalink.js';
 import * as cipherVisualization from './ui/cipherVisualization.js';
+import * as comparisonPanel from './ui/comparisonPanel.js';
 import './ciphers/caesar.js';
 import './ciphers/vigenere.js';
 import './ciphers/substitution.js';
@@ -87,6 +88,7 @@ function renderModeSwitch() {
             button.setAttribute('aria-pressed', 'true');
             resetRun();
             syncPermalink();
+            updateComparison();
         });
         modeSwitch.appendChild(button);
     });
@@ -132,6 +134,40 @@ function handleSpeedChange(level) {
     if (playTimer !== null) {
         clearInterval(playTimer);
         scheduleInterval(); // re-time only — no extra step from just adjusting speed
+    }
+}
+
+function defaultParamsFor(cipher) {
+    const params = {};
+    cipher.paramsSchema.forEach((field) => {
+        params[field.name] = field.default;
+    });
+    return params;
+}
+
+// Comparison mode shows a SECOND cipher's full result (its own default params, not a synced
+// step-by-step animation) next to the main one — a full duplicate of the options/animation stack
+// for a second cipher would be a much bigger feature than this needs to be.
+function updateComparison() {
+    if (!comparisonPanel.isEnabled()) return;
+
+    const comparisonCipher = ciphers.find((cipher) => cipher.id === comparisonPanel.getSelectedCipherId());
+    if (!comparisonCipher) return;
+
+    const text = textInput.value.trim();
+    if (!text) {
+        comparisonPanel.showResult(comparisonCipher.name, '(enter some text above)');
+        return;
+    }
+
+    try {
+        const params = defaultParamsFor(comparisonCipher);
+        const result = activeMode === 'encrypt'
+            ? comparisonCipher.encrypt(text, params)
+            : comparisonCipher.decrypt(text, params);
+        comparisonPanel.showResult(comparisonCipher.name, result);
+    } catch (error) {
+        comparisonPanel.showError(comparisonCipher.name, error.message);
     }
 }
 
@@ -247,6 +283,7 @@ function selectCipher(cipher, initialParams) {
 textInput.addEventListener('input', () => {
     resetRun();
     syncPermalink();
+    updateComparison();
 });
 controls.render({
     onBack: handleBack,
@@ -270,3 +307,8 @@ const ciphers = list();
 const startingCipher = ciphers.find((cipher) => cipher.id === initialState.cipherId) || ciphers[0];
 nav.render(ciphers, (cipher) => selectCipher(cipher), startingCipher.id);
 selectCipher(startingCipher, initialState.params);
+
+comparisonPanel.init(ciphers, {
+    onToggle: updateComparison,
+    onCipherChange: updateComparison,
+});
