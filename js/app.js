@@ -337,3 +337,13 @@ comparisonPanel.init(ciphers, {
 });
 
 historyPanel.init(handleHistorySelect);
+
+// Offline support is a progressive enhancement — if registration fails (unsupported browser,
+// non-secure context, etc.) the app still works online exactly as before.
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch((error) => {
+            console.warn('Service worker registration failed:', error);
+        });
+    });
+}
