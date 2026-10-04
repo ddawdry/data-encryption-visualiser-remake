@@ -95,6 +95,10 @@ Also worth noting: a single repeated distance often can't distinguish between a 
 
 `js/ui/comparisonPanel.js` lets you compare the active cipher against a second one on the same text, but deliberately shows the second cipher's complete result (via its plain `encrypt`/`decrypt`, using its own default params) rather than a second synced step-by-step animation. Properly animating two ciphers side by side would mean a second `stepEngine`, `historyStack`, options panel, and visualization panel — essentially doubling the app's entire interactive surface for one checkpoint. The chosen scope (same text and mode, two full results, side by side) still delivers the actual comparison the checkpoint asks for, just without the animation on the second side.
 
+### Design note: the PWA icons are hand-encoded PNGs, not a dependency
+
+`assets/icon-192.png` and `assets/icon-512.png` (a simple blocky padlock, referenced from `manifest.json`) were generated with a small one-off Node script that writes raw PNG bytes directly (PNG signature, `IHDR`/`IDAT`/`IEND` chunks, CRC32, `zlib.deflateSync` for the compressed pixel data) rather than pulling in an image-generation dependency — consistent with this project having no build step and no dependencies beyond Node's built-ins. Verified against an independent decoder (not just "my encoder says it's fine"): loaded both files with .NET's `System.Drawing.Image` and confirmed correct dimensions and exact pixel colors at known sample points. The generator script itself isn't committed — it was a one-off tool to produce two static image files, the same way a human would use any image editor once and commit the result, not the editor.
+
 ### Porting note: Vigenère key index
 
 `js/ciphers/vigenere.js` advances the keyword index by the character's absolute position in the text (`i % keyword.length`), including spaces and punctuation — not by the count of letters seen so far. That's not the textbook Vigenère definition, but it's exactly what the original `DataEncrypt.html` did, and it was kept intentionally for parity when ported in. See `tests/vigenere.test.js` for tests that lock in this exact behavior.

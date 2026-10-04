@@ -1,0 +1,24 @@
+{
+    "name": "Data Encryption/Decryption Visualiser",
+    "short_name": "DataEncrypt",
+    "description": "An interactive tool for visualising how encryption, decryption, and cryptanalysis algorithms work, step by step.",
+    "start_url": "./index.html",
+    "scope": "./",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#4CAF50",
+    "icons": [
+        {
+            "src": "assets/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "assets/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}
