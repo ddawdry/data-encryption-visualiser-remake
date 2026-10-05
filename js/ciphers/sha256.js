@@ -7,6 +7,11 @@
 // which is worth it for a hash demo. Verified against known SHA-256 test vectors (empty string and
 // "abc") and cross-checked against Node's native crypto for strings with multi-byte UTF-8
 // characters, since hand-rolled cryptographic code is exactly where subtle bugs hide.
+//
+// This file is dynamically imported (see app.js) rather than statically imported at startup,
+// since it's one of the larger cipher modules — its id/name/category/description/paramsSchema
+// below are DUPLICATED in app.js's lazy-cipher registration, so the picker can show it before
+// this file has actually loaded. Keep both copies in sync if you change any of those fields.
 import { register } from '../core/cipherRegistry.js';
 
 const K = [

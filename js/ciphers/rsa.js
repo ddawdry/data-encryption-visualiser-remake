@@ -7,6 +7,11 @@
 // runs of digits as tokens. To keep that parsing unambiguous, non-letter characters (including
 // spaces you typed) aren't preserved in the ciphertext — they contribute nothing to the result,
 // same "zero-width step" technique Polybius/Base64 use, just for a different reason here.
+//
+// This file is dynamically imported (see app.js) rather than statically imported at startup,
+// since it's one of the larger cipher modules — its id/name/category/description/paramsSchema
+// below are DUPLICATED in app.js's lazy-cipher registration, so the picker can show it before
+// this file has actually loaded. Keep both copies in sync if you change any of those fields.
 import { register } from '../core/cipherRegistry.js';
 
 function gcd(a, b) {

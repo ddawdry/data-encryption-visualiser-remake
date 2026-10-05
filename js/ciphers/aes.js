@@ -3,6 +3,11 @@
 // and a full key schedule; this demo substitutes simpler, still-genuinely-invertible stand-ins so
 // the STRUCTURE (four different kinds of operation, working together) is visible without requiring
 // abstract algebra. Each simplification is noted below and in the description shown in the app.
+//
+// This file is dynamically imported (see app.js) rather than statically imported at startup,
+// since it's one of the larger cipher modules — its id/name/category/description/paramsSchema
+// below are DUPLICATED in app.js's lazy-cipher registration, so the picker can show it before
+// this file has actually loaded. Keep both copies in sync if you change any of those fields.
 import { register } from '../core/cipherRegistry.js';
 
 const BLOCK_SIZE = 16;

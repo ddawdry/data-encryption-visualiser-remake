@@ -35,15 +35,54 @@
 // Ciphers self-register here (see the CipherModule typedef above).
 const ciphers = new Map();
 
+// Ids currently holding a lazy-loading placeholder (see registerLazy below) — allowed to be
+// overwritten exactly once, when the real module's own unchanged register() call runs.
+const lazyStubIds = new Set();
+
 /** @param {CipherModule} cipher */
 export function register(cipher) {
     if (!cipher || !cipher.id || typeof cipher.stepThrough !== 'function') {
         throw new Error('Cipher modules must have an id and a stepThrough() generator function');
     }
-    if (ciphers.has(cipher.id)) {
+    if (ciphers.has(cipher.id) && !lazyStubIds.has(cipher.id)) {
         throw new Error(`A cipher with id "${cipher.id}" is already registered`);
     }
+    lazyStubIds.delete(cipher.id);
     ciphers.set(cipher.id, cipher);
+}
+
+/**
+ * Registers a placeholder immediately (so the cipher shows up in the picker right away) for a
+ * cipher whose real implementation is loaded on demand. `load()`'s module is expected to call
+ * register() itself when it runs, exactly like every other cipher — that call is what replaces
+ * this stub, via the one-time overwrite allowance above. No changes needed to the real cipher
+ * file or its tests.
+ *
+ * @param {Pick<CipherModule, 'id'|'name'|'category'|'description'|'paramsSchema'>} meta
+ * @param {() => Promise<unknown>} load
+ * @returns {() => Promise<void>} ensureLoaded — call before using the cipher; resolves once the real module has registered
+ */
+export function registerLazy(meta, load) {
+    const notReady = () => {
+        throw new Error(`${meta.name} is still loading — please wait a moment and try again`);
+    };
+    register({
+        ...meta,
+        encrypt: notReady,
+        decrypt: notReady,
+        *stepThrough() {
+            notReady();
+        },
+    });
+    lazyStubIds.add(meta.id);
+
+    let loadPromise = null;
+    return function ensureLoaded() {
+        if (!loadPromise) {
+            loadPromise = load();
+        }
+        return loadPromise;
+    };
 }
 
 /** @returns {CipherModule|undefined} */

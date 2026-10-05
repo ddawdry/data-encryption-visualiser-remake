@@ -46,34 +46,6 @@
     min-height: 50px;
 }
 
-.hint-container {
-    position: relative;
-    display: inline-block;
-}
-
-.hint-container .hint-text {
-    visibility: hidden;
-    width: 200px;
-    background-color: var(--color-tooltip-bg);
-    color: var(--color-tooltip-text);
-    text-align: center;
-    border-radius: var(--radius-md);
-    padding: var(--space-sm);
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-    margin-left: -100px;
-    opacity: 0;
-    transition: opacity var(--transition-fast);
-    font-size: var(--font-size-sm);
-}
-
-.hint-container:hover .hint-text {
-    visibility: visible;
-    opacity: 1;
-}
-
 .highlight {
     background-color: var(--color-highlight);
     color: var(--color-on-highlight);

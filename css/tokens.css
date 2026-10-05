@@ -15,9 +15,6 @@
     --color-warning: #ffa726;
     --color-error: #f44336;
 
-    --color-tooltip-bg: #333333;
-    --color-tooltip-text: #ffffff;
-
     --color-highlight: #f5ff3b;
     --color-on-highlight: #1a1a1a; /* text color for the highlight/changed-block accents — always dark, in both themes */
     --color-info-bg: #cae5ce;

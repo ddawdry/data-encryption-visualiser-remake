@@ -107,6 +107,12 @@ Also worth noting: a single repeated distance often can't distinguish between a 
 
 `js/ciphers/vigenere.js` advances the keyword index by the character's absolute position in the text (`i % keyword.length`), including spaces and punctuation — not by the count of letters seen so far. That's not the textbook Vigenère definition, but it's exactly what the original `DataEncrypt.html` did, and it was kept intentionally for parity when ported in. See `tests/vigenere.test.js` for tests that lock in this exact behavior.
 
+### Design note: RSA, AES, and SHA-256 are dynamically imported
+
+Those three are the heaviest cipher modules (the most math), so `app.js` doesn't statically import them — nothing fetches or parses their code until the user actually selects one, keeping the initial bundle smaller. The tricky part: `cipherRegistry.register()` throws on a duplicate id, but the cipher picker needs each one's `name`/`description`/`paramsSchema` to render *before* its file has loaded. `cipherRegistry.js` solves this with `registerLazy(meta, load)`: it registers a placeholder immediately (its `encrypt`/`decrypt`/`stepThrough` just throw a "still loading" error) and remembers the id in a `lazyStubIds` set, which `register()` checks to allow exactly one overwrite for that id. When `app.js` later calls `load()` (a dynamic `import()`), the real file's own unchanged `register({...})` call replaces the stub — so the three cipher files needed zero logic changes, only a comment noting their metadata is duplicated in `app.js` and must stay in sync.
+
+One subtlety this created: `app.js` holds cipher references (`activeCipher`, the comparison-panel selection) picked from `ciphers = list()`, an array snapshotted once at bootstrap. Awaiting the lazy loader replaces the *registry's* entry, not the stale stub object that array element still points to. `startRun()` and `updateComparison()` both re-fetch via `cipherRegistry.get(id)` right after awaiting the load, to pick up the real module instead of continuing to hold the stub.
+
 ## Runtime data flow
 
 See [diagrams/architecture.png](diagrams/architecture.png) for the full module map. In short:
