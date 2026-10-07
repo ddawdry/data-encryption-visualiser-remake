@@ -1,5 +1,6 @@
 {
     "name": "data-encryption-visualiser-remake",
+    "version": "1.0.0",
     "private": true,
     "type": "module",
     "scripts": {
